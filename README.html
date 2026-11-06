@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QfA — Guide d'intégration WordPress</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, sans-serif; background: #f8fafc; color: #1e293b; line-height: 1.7; }
+header { background: #1e293b; color: #fff; padding: 32px 48px; }
+header h1 { font-size: 2rem; margin-bottom: 8px; }
+header p  { color: #94a3b8; font-size: 1.05rem; }
+.container { max-width: 860px; margin: 0 auto; padding: 40px 24px; }
+h2 { font-size: 1.4rem; color: #1e293b; margin: 40px 0 16px; padding-bottom: 8px; border-bottom: 2px solid #e2e8f0; }
+h3 { font-size: 1.1rem; color: #334155; margin: 24px 0 10px; }
+p  { color: #475569; margin-bottom: 12px; }
+.step { display: flex; gap: 16px; margin-bottom: 20px; align-items: flex-start; }
+.step-num { background: #2563eb; color: #fff; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; font-size: 0.9rem; }
+.step-content { flex: 1; }
+.step-content strong { color: #1e293b; display: block; margin-bottom: 4px; }
+code { background: #f1f5f9; color: #dc2626; padding: 2px 6px; border-radius: 4px; font-size: 0.9rem; font-family: monospace; }
+pre { background: #1e293b; color: #e2e8f0; padding: 20px; border-radius: 8px; overflow-x: auto; margin: 12px 0; font-size: 0.88rem; line-height: 1.6; }
+pre .comment { color: #64748b; }
+pre .key { color: #7dd3fc; }
+pre .val { color: #86efac; }
+.file-tree { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; font-family: monospace; font-size: 0.9rem; line-height: 2; }
+.file-tree .edit    { color: #16a34a; font-weight: bold; }
+.file-tree .drop    { color: #2563eb; }
+.file-tree .notouch { color: #94a3b8; }
+.badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.78rem; font-weight: bold; margin-left: 8px; vertical-align: middle; }
+.badge-edit    { background: #dcfce7; color: #16a34a; }
+.badge-drop    { background: #dbeafe; color: #2563eb; }
+.badge-notouch { background: #f1f5f9; color: #94a3b8; }
+.box { border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin: 16px 0; }
+.box-warn { border-color: #fbbf24; background: #fffbeb; }
+.box-ok   { border-color: #4ade80; background: #f0fdf4; }
+.box-info { border-color: #7dd3fc; background: #eff6ff; }
+.os-tabs { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+.os-tab { padding: 8px 20px; border: 2px solid #e2e8f0; border-radius: 6px; cursor: pointer; font-weight: bold; color: #64748b; background: #fff; }
+.os-tab.active { border-color: #2563eb; color: #2563eb; background: #eff6ff; }
+.os-content { display: none; }
+.os-content.active { display: block; }
+ul { margin-left: 20px; color: #475569; margin-bottom: 12px; }
+ul li { margin-bottom: 6px; }
+ol { margin-left: 20px; color: #475569; margin-bottom: 12px; }
+ol li { margin-bottom: 6px; }
+footer { background: #1e293b; color: #64748b; text-align: center; padding: 24px; margin-top: 60px; font-size: 0.9rem; }
+footer a { color: #7dd3fc; text-decoration: none; }
+a { color: #2563eb; }
+</style>
+</head>
+<body>
+
+<header>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+        <span style="font-size:28px;">🔐</span>
+        <h1>QfA — Intégration WordPress</h1>
+    </div>
+    <p style="font-size:1.2rem;color:#fff;font-weight:500;margin-bottom:16px;">Authentification QR code sur votre site WordPress</p>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;">
+        <div style="background:rgba(255,255,255,0.07);border-radius:8px;padding:12px;text-align:center;">
+            <div style="font-size:1.4rem;margin-bottom:6px;">1️⃣</div>
+            <p style="font-size:0.82rem;color:#cbd5e1;margin:0;">Copier le kit sur un WordPress existant</p>
+        </div>
+        <div style="background:rgba(255,255,255,0.07);border-radius:8px;padding:12px;text-align:center;">
+            <div style="font-size:1.4rem;margin-bottom:6px;">2️⃣</div>
+            <p style="font-size:0.82rem;color:#cbd5e1;margin:0;">Saisir la clé privée du site</p>
+        </div>
+        <div style="background:rgba(255,255,255,0.07);border-radius:8px;padding:12px;text-align:center;">
+            <div style="font-size:1.4rem;margin-bottom:6px;">3️⃣</div>
+            <p style="font-size:0.82rem;color:#cbd5e1;margin:0;">Activer le plugin qfa-login</p>
+        </div>
+        <div style="background:rgba(255,255,255,0.07);border-radius:8px;padding:12px;text-align:center;">
+            <div style="font-size:1.4rem;margin-bottom:6px;">4️⃣</div>
+            <p style="font-size:0.82rem;color:#cbd5e1;margin:0;">Les visiteurs s'authentifient sans mot de passe</p>
+        </div>
+    </div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        <span style="background:rgba(125,211,252,0.15);color:#7dd3fc;padding:4px 14px;border-radius:20px;font-size:0.82rem;">Plugin WordPress natif</span>
+        <span style="background:rgba(125,211,252,0.15);color:#7dd3fc;padding:4px 14px;border-radius:20px;font-size:0.82rem;">MFA par QR code</span>
+        <span style="background:rgba(125,211,252,0.15);color:#7dd3fc;padding:4px 14px;border-radius:20px;font-size:0.82rem;">zéro mot de passe</span>
+        <span style="background:rgba(125,211,252,0.15);color:#7dd3fc;padding:4px 14px;border-radius:20px;font-size:0.82rem;">Linux + Windows</span>
+    </div>
+</header>
+
+<div class="container">
+
+<!-- ── ARCHITECTURE ── -->
+<h2>🏗️ Architecture</h2>
+<p>Le kit WordPress agit comme frontend d'authentification. Le plugin <code>qfa-login</code> communique avec le serveur <strong>FidPub</strong> (service QfA) via WebSocket chiffré (AES/ECB/PKCS7). WordPress ne stocke aucun mot de passe — l'identité est validée par le mobile de l'utilisateur.</p>
+
+<div class="box box-info">
+    <strong>Flux d'authentification :</strong>
+    <pre style="margin-top:8px;background:#1e3a5f;color:#e2e8f0;">Navigateur → WordPress (qfa-login) → FidPub (WebSocket) → Mobile (App Qovi)
+                                    ←─────────────────────────────────────
+                              Session WordPress créée ✅</pre>
+</div>
+
+<!-- ── STRUCTURE ── -->
+<h2>📁 Structure du kit</h2>
+<div class="file-tree">
+qfa-wp-kit/<br>
+├── <span class="notouch">wp-admin/</span> <span class="badge badge-notouch">🔒 Core WordPress — ne pas modifier</span><br>
+├── <span class="notouch">wp-includes/</span> <span class="badge badge-notouch">🔒 Core WordPress — ne pas modifier</span><br>
+├── wp-content/<br>
+│   ├── plugins/<br>
+│   │   └── <span class="edit">qfa-login/</span> <span class="badge badge-edit">✏️ Code QfA — seul dossier à modifier</span><br>
+│   │   &nbsp;&nbsp;&nbsp;&nbsp;├── <span class="edit">qfa-login.php</span> <span class="badge badge-edit">✏️ Plugin principal</span><br>
+│   │   &nbsp;&nbsp;&nbsp;&nbsp;└── res/ <span class="badge badge-notouch">🔒 Assets JS/JSON</span><br>
+│   └── themes/ <span class="badge badge-notouch">🔒 Votre thème WordPress (non fourni)</span><br>
+└── <span class="edit">wp-config.php</span> <span class="badge badge-edit">✏️ Configuration DB WordPress</span>
+</div>
+
+<div class="box box-info">
+    <strong>💡 Principe de déploiement</strong> — le kit est un <em>patch différentiel</em> : copier/coller le contenu de <code>qfa-wp-kit/</code> par-dessus un WordPress propre. Les dossiers <code>wp-admin/</code> et <code>wp-includes/</code> vides dans le kit servent de marqueurs visuels — ils rappellent que ces dossiers doivent être fournis par le WordPress cible.
+</div>
+
+<!-- ── DÉPLOIEMENT ── -->
+<h2>⚙️ Déploiement</h2>
+
+<div class="os-tabs">
+    <div class="os-tab active" onclick="showOS(event, 'linux')">🐧 Linux</div>
+    <div class="os-tab" onclick="showOS(event, 'windows')">🪟 Windows</div>
+</div>
+
+<div id="os-linux" class="os-content active">
+
+    <h3>1. Prérequis</h3>
+    <pre><span class="comment"># Apache + PHP + module pgsql</span>
+apt update && apt install -y apache2 php php-curl php-pgsql
+systemctl enable apache2 && systemctl start apache2</pre>
+
+    <h3>2. Installer WordPress</h3>
+    <pre><span class="comment"># Télécharger WordPress dans le dossier cible</span>
+cd /var/www/html
+wget https://wordpress.org/latest.tar.gz
+tar xzf latest.tar.gz
+mv wordpress/* .
+rm -rf wordpress latest.tar.gz
+chown -R www-data:www-data /var/www/html/</pre>
+
+    <h3>3. Copier le kit QfA par-dessus</h3>
+    <pre><span class="comment"># CC inverse : le kit écrase uniquement ses propres fichiers</span>
+cp -r /chemin/vers/qfa-wp-kit/wp-content/plugins/qfa-login \
+      /var/www/html/wp-content/plugins/
+cp /chemin/vers/qfa-wp-kit/wp-config.php /var/www/html/wp-config.php
+chown -R www-data:www-data /var/www/html/wp-content/plugins/qfa-login</pre>
+
+    <h3>4. Configurer Apache</h3>
+    <pre><span class="comment"># /etc/apache2/sites-available/monsite.conf</span>
+&lt;VirtualHost *:80&gt;
+    ServerName monsite.com
+    DocumentRoot /var/www/html
+    &lt;Directory /var/www/html&gt;
+        AllowOverride All
+        Require all granted
+    &lt;/Directory&gt;
+&lt;/VirtualHost&gt;</pre>
+    <pre>a2ensite monsite.conf
+a2enmod rewrite
+systemctl reload apache2</pre>
+
+    <h3>5. HTTPS avec Let's Encrypt</h3>
+    <pre>apt install -y certbot python3-certbot-apache
+certbot --apache -d monsite.com</pre>
+
+    <div class="box box-ok">
+        <strong>✅ FidPub doit être accessible</strong> — vérifier que le service FidPub est actif sur le port configuré dans <code>qfa-login.php</code> et que le firewall autorise la connexion WebSocket depuis le serveur Apache.
+    </div>
+
+</div>
+
+<div id="os-windows" class="os-content">
+
+    <h3>1. Prérequis</h3>
+    <p>Installer <a href="https://www.apachefriends.org" target="_blank">XAMPP</a> (Apache + PHP + MySQL en 1 clic) ou utiliser un hébergement mutualisé qui fournit WordPress préinstallé.</p>
+
+    <h3>2. Installer WordPress</h3>
+    <p>Télécharger depuis <a href="https://wordpress.org/download/" target="_blank">wordpress.org</a> et extraire dans :</p>
+    <pre>C:\xampp\htdocs\</pre>
+
+    <h3>3. Copier le kit QfA par-dessus</h3>
+    <p>Copier/coller le contenu de <code>qfa-wp-kit\</code> dans le dossier WordPress — Windows propose d'écraser les fichiers existants, accepter.</p>
+    <p>Seuls les fichiers QfA sont copiés :</p>
+    <pre>wp-content\plugins\qfa-login\   ← plugin QfA
+wp-config.php                   ← configuration DB</pre>
+
+    <h3>4. Tester en local</h3>
+    <pre>http://localhost/wp-login.php</pre>
+
+</div>
+
+<!-- ── CONFIGURATION ── -->
+<h2>🔑 Configuration du plugin</h2>
+
+<p>Rien à modifier dans les fichiers : tout se règle dans l'administration WordPress, menu <b>Réglages → Qovi Login</b>.</p>
+
+<ul>
+    <li><b>Adresse du service Qovi</b> : <code>https://qovi.ch/RST</code> (valeur par défaut).</li>
+    <li><b>Clé privée du site</b> : la <b>seule</b> clé à copier, depuis votre espace administrateur sur qovi.ch (compte <code>ch.qovi@votredomaine.com</code>). Champ masqué, jamais réaffiché. Elle ne quitte jamais votre serveur : les requêtes vers Qovi sont <b>signées</b>.</li>
+    <li><b>Page de connexion</b> et <b>page après connexion</b>.</li>
+</ul>
+
+<div class="box box-warn">
+    <strong>⚠️ Prérequis serveur</strong> — l'horloge du serveur doit être à l'heure (NTP, à ±60 s près) et PHP doit pouvoir ouvrir une URL HTTPS (<code>allow_url_fopen</code> activé).
+</div>
+
+<!-- ── ACTIVATION ── -->
+<h2>🔌 Activation du plugin</h2>
+
+<div class="step">
+    <div class="step-num">1</div>
+    <div class="step-content">
+        <strong>Connectez-vous à l'admin WordPress</strong>
+        <pre>https://monsite.com/wp-admin/</pre>
+    </div>
+</div>
+<div class="step">
+    <div class="step-num">2</div>
+    <div class="step-content">
+        <strong>Extensions → Extensions installées</strong>
+        <p>Le plugin <strong>QfA Login</strong> apparaît dans la liste. Cliquer sur <strong>Activer</strong>.</p>
+    </div>
+</div>
+<div class="step">
+    <div class="step-num">3</div>
+    <div class="step-content">
+        <strong>Tester l'authentification</strong>
+        <p>Ouvrir une fenêtre de navigation privée et accéder à une page protégée — le formulaire QfA doit s'afficher à la place du formulaire WordPress standard.</p>
+    </div>
+</div>
+
+<!-- ── SÉCURITÉ ── -->
+<h2>🛡️ Notes de sécurité</h2>
+<ul>
+    <li>Le fichier <code>wp-config.php</code> contient les identifiants DB — ne jamais le versionner dans un dépôt public.</li>
+    <li>La clé privée du site (réglages du plugin, stockée dans la base WordPress) est sensible — même précaution pour les sauvegardes de la base.</li>
+    <li>En production, HTTPS est obligatoire — les cookies de session WordPress sont marqués <code>Secure</code> automatiquement.</li>
+    <li>L'accès à <code>/wp-admin/</code> en production doit être restreint par IP ou protégé par un second facteur.</li>
+</ul>
+
+<!-- ── SUPPORT ── -->
+<h2>💬 Ressources</h2>
+<div class="box">
+    <p>📧 <a href="mailto:hotline@qovi.ch">hotline@qovi.ch</a></p>
+    <p style="margin-top: 8px;">🌐 <a href="https://qovi.ch" target="_blank">qovi.ch</a></p>
+    <p style="margin-top: 8px;">📄 <a href="README-php.html">Guide d'intégration PHP</a> — pour les sites sans WordPress</p>
+</div>
+
+</div>
+
+<footer>
+    QfA — Authentification par QR code &nbsp;|&nbsp; <a href="https://qovi.ch">qovi.ch</a>
+</footer>
+
+<script>
+function showOS(e, os) {
+    document.querySelectorAll('.os-tab').forEach(function(t) { t.classList.remove('active'); });
+    document.querySelectorAll('.os-content').forEach(function(c) { c.classList.remove('active'); });
+    document.getElementById('os-' + os).classList.add('active');
+    e.target.classList.add('active');
+}
+</script>
+
+<section style="border:2px solid #0F3ECE;border-radius:8px;padding:16px 20px;margin:28px 0;background:#F3F6FF">
+<h2 style="margin-top:0">Sécurité (version d'octobre 2026)</h2>
+<ul>
+<li><b>La clé privée du site ne quitte jamais votre serveur.</b> Elle n'est jamais envoyée au navigateur, ni écrite dans un journal. Elle sert seulement à <b>signer</b> chaque demande ; le service Qovi vérifie la signature, et votre serveur vérifie celle de la réponse.</li>
+<li><b>La fin de connexion est vérifiée par Qovi.</b> Votre serveur n'ouvre la session que si Qovi confirme : validation réelle sur le mobile, délai de 120 secondes, usage unique, même navigateur que celui qui a lancé la demande. L'adresse e-mail de la session est <b>celle confirmée par Qovi</b>, jamais celle envoyée par le navigateur.</li>
+<li><b>Ne publiez jamais votre clé privée</b> (dépôt git, capture d'écran, message). Si elle a pu être exposée, renouvelez-la depuis votre espace administrateur Qovi.</li>
+<li><b>HTTPS obligatoire</b> sur votre site.</li>
+</ul>
+<h3>Extension « Qovi Login » 2.3</h3>
+<ol>
+<li>Installez un WordPress standard, puis copiez le dossier <code>wp-content/plugins/qfa-login</code> du kit et activez « Qovi Login ».</li>
+<li><b>Réglages → Qovi Login</b> : adresse du service (par défaut <code>https://qovi.ch/RST</code>), <b>clé privée</b> (champ masqué, jamais réaffichée ; laisser vide pour ne pas la changer), page de connexion et page après connexion.</li>
+<li>Créez une <b>page de connexion</b> avec <code>[qfa_login]</code> et une <b>autre page</b> privée avec <code>[qfa_private]votre contenu[/qfa_private]</code>. Bouton de sortie : <code>[qfa_logout]</code>. Lien « Connexion / Déconnexion » selon l'état, à placer dans un en-tête ou un menu : <code>[qfa_login_link]</code>.</li>
+<li><b>Une page devient privée par son contenu</b>, pas par un réglage : c'est le code court <code>[qfa_private]…[/qfa_private]</code> qui la protège. Écrivez les codes courts <b>avec leurs crochets</b>, dans un paragraphe ou un bloc « Shortcode » — jamais dans un bloc « Code » (il les afficherait sans les exécuter).</li>
+<li>Testez dans une <b>fenêtre de navigation privée</b> : un administrateur WordPress connecté voit les pages privées sans passer par Qovi.</li>
+<li>Permaliens : choisissez <b>« Titre de la publication »</b> (Réglages → Permaliens). Le mode <code>/index.php/…</code> que WordPress choisit quand il ne peut pas écrire son <code>.htaccess</code> empêche l'éditeur d'enregistrer les pages.</li>
+</ol>
+<p>Conseil : interdisez l'installation d'extensions en production (<code>define('DISALLOW_FILE_MODS', true);</code> dans <code>wp-config.php</code>).</p>
+</section>
+<section style="border:2px solid #334155;border-radius:8px;padding:16px 20px;margin:28px 0;background:#F8FAFC">
+<h2 style="margin-top:0">Licence et sources</h2>
+<ul>
+<li><b>Licence : GPL-2.0-or-later</b> (identifiant SPDX <code>GPL-2.0-or-later</code>), texte complet dans le fichier <code>LICENSE</code> du kit. © 2026 Marc Gandar. Le moteur du composant (<code>res/qfa-*.js</code>) est sous licence <code>MPL-2.0</code>, compatible avec la GPL.</li>
+<li><b>Sources :</b> ce kit est livré sous forme de sources complètes ; la dernière version se télécharge sur <a href="https://qovi.ch">qovi.ch</a>, page des exemples.</li>
+<li><b>Marque :</b> Qovi est une marque de Marc Gandar ; un projet dérivé ne peut pas porter ce nom (voir <code>NOTICE</code>).</li>
+<li><b>Contributions :</b> bienvenues, avec la signature DCO (<code>Signed-off-by</code>, voir <code>CONTRIBUTING.md</code>).</li>
+<li><b>Faille de sécurité :</b> écrivez à <a href="mailto:security@qovi.ch">security@qovi.ch</a>, jamais dans une issue publique (voir <code>SECURITY.md</code>).</li>
+<li><b>Fourni sans garantie</b>, dans les limites prévues par la licence.</li>
+</ul>
+<p lang="en" style="color:#475569"><b>English:</b> licensed under GPL-2.0-or-later (see <code>LICENSE</code>), © 2026 Marc Gandar. Full source code is included; latest version on qovi.ch. Qovi is a trademark of Marc Gandar. Contributions require a DCO sign-off. Report vulnerabilities to security@qovi.ch. Provided without warranty.</p>
+</section>
+</body>
+</html>

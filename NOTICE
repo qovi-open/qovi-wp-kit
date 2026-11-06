@@ -1,0 +1,21 @@
+Qovi — exemple d'intégration WordPress / integration example WordPress
+Copyright (c) 2026 Marc Gandar
+
+Ce logiciel est distribué sous licence GPL-2.0-or-later : voir le fichier LICENSE.
+This software is licensed under GPL-2.0-or-later: see the LICENSE file.
+
+Le moteur du composant (wp-content/plugins/qfa-login/res/qfa-*.js) est sous
+licence MPL-2.0, (c) Marc Gandar, compatible avec la GPL.
+The component engine (wp-content/plugins/qfa-login/res/qfa-*.js) is licensed
+under MPL-2.0, (c) Marc Gandar, which is compatible with the GPL.
+
+Qovi est une marque de Marc Gandar. La licence ne donne aucun droit sur cette
+marque : un projet dérivé ne peut pas porter le nom « Qovi » ni utiliser son logo.
+Qovi is a trademark of Marc Gandar. The licence grants no right to this
+trademark: a derived project may not use the name "Qovi" or its logo.
+
+Ce kit est fourni sous forme de sources ; dernière version : https://qovi.ch
+This kit is distributed as source code; latest version: https://qovi.ch
+
+Fourni sans garantie, dans les limites prévues par la licence.
+Provided without warranty, as stated in the licence.
